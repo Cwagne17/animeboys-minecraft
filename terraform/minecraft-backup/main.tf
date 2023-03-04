@@ -46,3 +46,15 @@ resource "aws_s3_object" "tconstruct" {
     key    = "forge/mods/tconstruct-1.18.2-3.6.3.111.jar"
     source = "files/mods/TConstruct-1.18.2-3.6.3.111.jar"
 }
+
+resource "aws_s3_object" "jei" {
+    bucket = aws_s3_bucket.minecraft-backup.id
+    key    = "forge/mods/jei-1.18.2-forge-10.2.1.1002.jar"
+    source = "files/mods/jei-1.18.2-forge-10.2.1.1002.jar"
+}
+
+resource "aws_s3_object" "mowziesmobs" {
+  bucket = aws_s3_bucket.minecraft-backup.id
+  key    = "forge/mods/mowziesmobs-1.18.2-1.5.32.jar"
+  source = "files/mods/mowziesmobs-1.5.32.jar"
+}
