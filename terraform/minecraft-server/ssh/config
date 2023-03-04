@@ -1,0 +1,5 @@
+Host mc-server
+    Hostname 35.170.198.92
+    Port 22
+    User ec2-user
+    IdentityFile ~/Documents/animeboys-minecraft/terraform/minecraft-server/ssh/id_rsa
