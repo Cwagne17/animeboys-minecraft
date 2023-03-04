@@ -21,6 +21,12 @@ resource "aws_s3_object" "server" {
   source = "files/minecraft_server.1.19.3.jar"
 }
 
+resource "aws_s3_object" "forge" {
+  bucket = aws_s3_bucket.minecraft-backup.id
+  key = "mc-server/forge-1.18.2-40.2.0-installer.jar"
+  source = "files/forge-1.18.2-40.2.0-installer.jar"
+}
+
 resource "aws_s3_object" "setup" {
     bucket = aws_s3_bucket.minecraft-backup.id
     key    = "setup/minecraft.service"
