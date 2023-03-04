@@ -58,3 +58,9 @@ resource "aws_s3_object" "mowziesmobs" {
   key    = "forge/mods/mowziesmobs-1.18.2-1.5.32.jar"
   source = "files/mods/mowziesmobs-1.5.32.jar"
 }
+
+resource "aws_s3_object" "geckolib" {
+  bucket = aws_s3_bucket.minecraft-backup.id
+  key    = "forge/mods/geckolib-quilt-1.18-3.0.46.jar"
+  source = "files/mods/geckolib-quilt-1.18-3.0.46.jar"
+}
