@@ -6,8 +6,10 @@ After=network.target
 [Service]
 Type=simple
 User=ec2-user
-ExecStart=/usr/bin/java -Xmx1024M -Xms1024M -jar minecraft_server.1.19.3.jar nogui
-#ExecStart=/bin/bash /minecraft/forge/run.sh
+#WorkingDirectory=/minecraft/mc-server
+#ExecStart=/usr/bin/java -Xmx1024M -Xms1024M -jar minecraft_server.1.19.3.jar nogui
+WorkingDirectory=/minecraft/forge
+ExecStart=/bin/bash ./run.sh
 
 [Install]
 WantedBy=multi-user.target
