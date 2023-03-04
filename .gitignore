@@ -1,3 +1,5 @@
 .terraform
 *.tfstate*
 id_rsa
+.env
+.DS_Store
