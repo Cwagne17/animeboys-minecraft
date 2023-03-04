@@ -10,3 +10,33 @@
 [INFO] 2023-03-04 11:47:26 - logging in using static token
 [INFO] 2023-03-04 11:47:27 - Shard ID None has connected to Gateway (Session ID: 96b8f1383db4642607139a03d7393456).
 [INFO] 2023-03-04 11:47:29 - We have logged in as MinecraftServerBot#8118
+[WARNING] 2023-03-04 12:02:35 - PyNaCl is not installed, voice will NOT be supported
+[INFO] 2023-03-04 12:02:35 - logging in using static token
+[INFO] 2023-03-04 12:02:36 - Shard ID None has connected to Gateway (Session ID: 74a909ff48a085c29f6da67279433a59).
+[INFO] 2023-03-04 12:02:38 - We have logged in as MinecraftServerBot#8118
+[INFO] 2023-03-04 12:19:27 - Shard ID None has successfully RESUMED session 74a909ff48a085c29f6da67279433a59.
+[ERROR] 2023-03-04 12:38:03 - Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Users\molin\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\discord\client.py", line 441, in _run_event
+    await coro(*args, **kwargs)
+  File "C:\Users\molin\dev\animeboys-minecraft\discord-bot\main.py", line 44, in on_message
+    command = message.content.split("$")[1]
+IndexError: list index out of range
+[WARNING] 2023-03-04 12:53:38 - PyNaCl is not installed, voice will NOT be supported
+[INFO] 2023-03-04 12:53:38 - logging in using static token
+[INFO] 2023-03-04 12:53:39 - Shard ID None has connected to Gateway (Session ID: bbffcf0611d420411e6b7571a649727d).
+[INFO] 2023-03-04 12:53:41 - We have logged in as MinecraftServerBot#8118
+[ERROR] 2023-03-04 12:53:43 - Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Users\molin\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\discord\client.py", line 441, in _run_event
+    await coro(*args, **kwargs)
+  File "C:\Users\molin\dev\animeboys-minecraft\discord-bot\main.py", line 44, in on_message
+    command = message.content.split("$")[1]
+IndexError: list index out of range
+[ERROR] 2023-03-04 13:12:14 - Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Users\molin\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\discord\client.py", line 441, in _run_event
+    await coro(*args, **kwargs)
+  File "C:\Users\molin\dev\animeboys-minecraft\discord-bot\main.py", line 44, in on_message
+    command = message.content.split("$")
+IndexError: list index out of range

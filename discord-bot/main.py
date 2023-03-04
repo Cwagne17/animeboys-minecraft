@@ -41,7 +41,10 @@ async def on_message(message):
         logger.info("Unauthorized user: " + str(message.author))
         return
 
-    command = message.content.split("$")[1]
+    command = message.content.split("$")
+    if len(command) < 2:
+        return
+    command = command[1].lower()
     if command == "start":
         await message.channel.send('Starting...')
         await message.channel.typing()
