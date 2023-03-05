@@ -31,9 +31,10 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-
+    ''' Event handler that executes when a message is sent in any channel of the discord server '''
     if message.author == client.user:
         return
+
     if str(message.channel) != PRIVATE_CHANNEL:
         logger.info("Unauthorized channel: " + str(message.channel))
         return
@@ -44,12 +45,28 @@ async def on_message(message):
     command = message.content.split("$")
     if len(command) < 2:
         return
+
     command = command[1].lower()
     if command == "start":
         await message.channel.send('Starting...')
-        await message.channel.typing()
-    if command == "hello":
-        await message.channel.send('Hello!')
+    elif command == "stop":
+        await message.channel.send('Stopping...')
+    elif command == "status":
+        await message.channel.send('Server is running')
+    elif command == "help":
+        await message.channel.send(print_help())
+    else:
+        await message.channel.send('Unknown command. Try $help for a list of commands.')
+    
+
+def print_help():
+    return f"""
+    Welcome to the Minecraft Bot! Here are the commands you can use:
+    $start - Starts the Minecraft server
+    $stop - Stops the Minecraft server
+    $status - Gets the status of the Minecraft server
+    $help - Displays this message
+    """
 
 def start_minecraft_server():
     pass
@@ -57,7 +74,7 @@ def start_minecraft_server():
 KEY = os.environ.get("DISCORD_KEY")
 
 if KEY is None:
-    logger.info("Key not found")
+    logger.error("Key not found")
     sys.exit(1)
 
 client.run(KEY, log_handler=None)
