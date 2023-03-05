@@ -66,10 +66,16 @@ async def on_message(message):
     command = command[1].lower()
     if command == "start":
         await message.channel.send('Starting...')
+        await message.channel.typing()
+        await message.channel.send(start_minecraft_server())
     elif command == "stop":
         await message.channel.send('Stopping...')
+        await message.channel.typing()
+        await message.channel.send(stop_minecraft_server())
     elif command == "status":
-        await message.channel.send('Server is running')
+        await message.channel.send('Getting status...')
+        await message.channel.typing()
+        await message.channel.send(get_minecraft_server_status())
     elif command == "help":
         await message.channel.send(print_help())
     else:
@@ -109,10 +115,15 @@ def stop_minecraft_server():
         logger.error(e)
         return "An error occurred while stopping the server. Please try again later."
     
-KEY = os.environ.get("DISCORD_KEY")
+def get_minecraft_server_status():
+    try:
+        res = ec2.describe_instances(
+            InstanceIds=[INSTANCE_ID],
+            DryRun=False
+        )
+        curr_state = res['Reservations'][0]['Instances'][0]['State']['Name']
+        return f"Server's state is {curr_state}"
+    except Exception as e:
+        logger.error(e)
+        return "An error occurred while getting the server's status. Please try again later."
 
-if KEY is None:
-    logger.error("Key not found")
-    sys.exit(1)
-
-client.run(KEY, log_handler=None)
