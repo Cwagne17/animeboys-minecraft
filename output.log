@@ -1,6 +1,0 @@
-[WARNING] 2023-03-04 20:28:17 - PyNaCl is not installed, voice will NOT be supported
-[ERROR] 2023-03-04 20:28:17 - Key not found
-[WARNING] 2023-03-04 20:28:51 - PyNaCl is not installed, voice will NOT be supported
-[INFO] 2023-03-04 20:28:51 - logging in using static token
-[INFO] 2023-03-04 20:28:52 - Shard ID None has connected to Gateway (Session ID: c21cdf240014c7c2b239e029f80a11e2).
-[INFO] 2023-03-04 20:28:54 - We have logged in as MinecraftServerBot#8118

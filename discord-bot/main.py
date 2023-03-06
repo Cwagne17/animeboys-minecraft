@@ -34,13 +34,13 @@ if INSTANCE_ID is None:
     sys.exit(1)
 
 AWS_PROFILE = os.environ.get("AWS_PROFILE")
-ec2 = boto3.resource('ec2', region_name='us-east-1', profile_name=AWS_PROFILE)
+session = boto3.Session(profile_name=AWS_PROFILE)
+ec2 = session.client('ec2', region_name='us-east-1')
 
 intents = discord.Intents.default()
 intents.message_content = True
 
 client = discord.Client(intents=intents)
-client.run(KEY, log_handler=None)
 
 @client.event
 async def on_ready():
@@ -51,7 +51,6 @@ async def on_message(message):
     ''' Event handler that executes when a message is sent in any channel of the discord server '''
     if message.author == client.user:
         return
-
     if str(message.channel) != PRIVATE_CHANNEL:
         logger.info("Unauthorized channel: " + str(message.channel))
         return
@@ -64,6 +63,7 @@ async def on_message(message):
         return
 
     command = command[1].lower()
+    logger.info("Incoming command: " + command)
     if command == "start":
         await message.channel.send('Starting...')
         await message.channel.typing()
@@ -118,7 +118,6 @@ def stop_minecraft_server():
 def get_minecraft_server_status():
     try:
         res = ec2.describe_instances(
-            InstanceIds=[INSTANCE_ID],
             DryRun=False
         )
         curr_state = res['Reservations'][0]['Instances'][0]['State']['Name']
@@ -127,3 +126,4 @@ def get_minecraft_server_status():
         logger.error(e)
         return "An error occurred while getting the server's status. Please try again later."
 
+client.run(KEY, log_handler=None)
