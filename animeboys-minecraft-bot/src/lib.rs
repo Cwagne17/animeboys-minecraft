@@ -67,7 +67,7 @@ impl Bot {
             .to_string())
     }
     pub async fn stop_instance(&self) -> Result<(), Ec2Error> {
-        let res = self.ec2_client
+        self.ec2_client
             .stop_instances()
             .instance_ids(self.instance_id.clone())
             .send()
@@ -213,7 +213,10 @@ impl EventHandler for Bot {
                     error!("Error sending message: {:?}", e);
                 }
             }
-            _ => {
+            message => {
+                if message.strip_prefix("$").is_none() {
+                    return;
+                }
                 if let Err(e) = msg.channel_id.say(&ctx.http, "Unknown command. Try $help for a list of commands.").await {
                     error!("Error sending message: {:?}", e);
                 }
