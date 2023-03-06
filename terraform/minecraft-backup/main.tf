@@ -43,8 +43,8 @@ resource "aws_s3_object" "mantle" {
 
 resource "aws_s3_object" "tconstruct" {
     bucket = aws_s3_bucket.minecraft-backup.id
-    key    = "forge/mods/tconstruct-1.18.2-3.6.3.111.jar"
-    source = "files/mods/TConstruct-1.18.2-3.6.3.111.jar"
+    key    = "forge/mods/tconstruct-1.18.2-3.5.2.40.jar"
+    source = "files/mods/TConstruct-1.18.2-3.5.2.40.jar"
 }
 
 resource "aws_s3_object" "jei" {
