@@ -1,8 +1,7 @@
-use std::{fmt::Display, os};
+use std::{fmt::Display};
 use std::env;
 use anyhow::anyhow;
-use aws_config::meta::region::RegionProviderChain;
-use aws_sdk_ec2::{Error, Region};
+use aws_sdk_ec2::Region;
 use serenity::async_trait;
 use serenity::model::channel::Message;
 use serenity::model::gateway::Ready;
