@@ -34,6 +34,9 @@ if INSTANCE_ID is None:
     sys.exit(1)
 
 AWS_PROFILE = os.environ.get("AWS_PROFILE")
+if AWS_PROFILE is None:
+    logger.warning("AWS_PROFILE not found. Using default profile.")
+
 session = boto3.Session(profile_name=AWS_PROFILE)
 ec2 = session.client('ec2', region_name='us-east-1')
 
