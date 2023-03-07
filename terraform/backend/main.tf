@@ -1,5 +1,5 @@
 locals {
-    project_name = "animeboys-minecraft"
+  project_name = "animeboys-minecraft"
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
