@@ -97,6 +97,10 @@ impl Bot {
         Ok(status)
     }
     pub async fn get_instance_ip(&self) -> Result<String, Ec2Error> {
+        let status = self.get_instance_status().await?;
+        if status != "running" {
+            return Err(Ec2Error::new("Instance is not running".into()))
+        }
         Ok(self.ec2_client
             .describe_instances()
             .instance_ids(self.instance_id.clone())
@@ -192,7 +196,8 @@ impl EventHandler for Bot {
                 let typing = msg.channel_id.start_typing(&ctx.http).unwrap();
                 let ip = self.get_instance_ip().await;
                 if ip.is_err() {
-                    msg.channel_id.say(&ctx.http, "Error getting instance ip").await.unwrap();
+                    let ip = ip.unwrap_err();
+                    msg.channel_id.say(&ctx.http, format!("Error getting instance ip: {}", ip.message)).await.unwrap();
                     return;
                 }
                 let ip = ip.unwrap_or_else(|_| "undefined. Check Logs.".into());
