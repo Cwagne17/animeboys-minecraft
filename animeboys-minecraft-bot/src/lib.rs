@@ -1,3 +1,4 @@
+use std::time::Duration;
 use std::{fmt::Display};
 use std::env;
 use anyhow::anyhow;
@@ -162,6 +163,31 @@ impl EventHandler for Bot {
                 let status = status.unwrap_or_else(|_| "undefined. Check Logs.".into());
                 if let Err(e) = msg.channel_id.say(&ctx.http, format!("The status of the instance is now: {}", status)).await {
                     error!("Error sending message: {:?}", e);
+                }
+                // TODO: Get the public ip of the instance and send it to the user
+                if let Err(e) = msg.channel_id.say(&ctx.http, "Getting public ip...").await {
+                    error!("Error sending message: {:?}", e);
+                }
+                loop {
+                    let status = self.get_instance_status().await;
+                    if status.is_err() {
+                        msg.channel_id.say(&ctx.http, "Error getting instance status").await.unwrap();
+                        return;
+                    }
+                    let status = status.unwrap_or_else(|_| "undefined. Check Logs.".into());
+                    if status == "running" {
+                        let ip = self.get_instance_ip().await;
+                        if ip.is_err() {
+                            msg.channel_id.say(&ctx.http, "Error getting instance ip").await.unwrap();
+                            return;
+                        }
+                        let ip = ip.unwrap_or_else(|_| "undefined. Check Logs.".into());
+                        if let Err(e) = msg.channel_id.say(&ctx.http, format!("The public ip of the instance is: {}", ip)).await {
+                            error!("Error sending message: {:?}", e);
+                        }
+                        break;
+                    }
+                    tokio::time::sleep(Duration::from_secs(3)).await;
                 }
                 typing.stop().unwrap();
                     
