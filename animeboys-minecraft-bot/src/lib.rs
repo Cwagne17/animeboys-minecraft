@@ -135,6 +135,11 @@ impl EventHandler for Bot {
         if msg.author.bot {
             return;
         }
+        // TODO: Add a way to only accept messages from a specific channel
+        if msg.channel_id.0 != CHANNEL_ID {
+            info!("Message sent in wrong channel");
+            return;
+        }
         // TODO: Add a way to authorize users
         if !AUTHORIZED_USERS.contains(&msg.author.tag().as_str()) {
             if let Err(e) = msg.channel_id.say(&ctx.http, "You are not authorized to use this bot").await {
@@ -143,11 +148,7 @@ impl EventHandler for Bot {
             return;
         }
         debug!("Message received from {}", msg.author.tag());
-        // TODO: Add a way to only accept messages from a specific channel
-        if msg.channel_id.0 != CHANNEL_ID {
-            info!("Message sent in wrong channel");
-            return;
-        }
+        
         debug!("Message received: {}", msg.content);
         match msg.content.as_str() {
             "$start" => {
