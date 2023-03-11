@@ -119,8 +119,8 @@ impl Bot {
     pub async fn print_help(&self) -> String {
         "
     Welcome to the Minecraft Bot! Here are the commands you can use:
-        $start - Starts the Minecraft server
-        $stop - Stops the Minecraft server
+        $start - Starts the Minecraft server (REQUIRES AUTHORIZATION)
+        $stop - Stops the Minecraft server (REQUIRES AUTHORIZATION)
         $status - Gets the status of the Minecraft server
         $getip - Gets the public ip of the Minecraft server
         $help - Displays this message
@@ -150,8 +150,8 @@ impl EventHandler for Bot {
         debug!("Message received from {}", msg.author.tag());
         
         debug!("Message received: {}", msg.content);
-        match msg.content.as_str() {
-            "$start" => {
+        match (msg.content.as_str(), AUTHORIZED_USERS.contains(&msg.author.tag().as_str())) {
+            ("$start", true) => {
                 if let Err(e) = msg.channel_id.say(&ctx.http, "Starting instance...").await {
                     error!("Error sending message: {:?}", e);
                 }
@@ -193,7 +193,7 @@ impl EventHandler for Bot {
                 typing.stop().unwrap();
                     
             }
-            "$stop" => {
+            ("$stop", true) => {
                 if let Err(e) = msg.channel_id.say(&ctx.http, "Stopping instance...").await {
                     error!("Error sending message: {:?}", e);
                 }
@@ -207,7 +207,7 @@ impl EventHandler for Bot {
                 }
                 typing.stop().unwrap();
             }
-            "$status" => {
+            ("$status", _) => {
                 let status = self.get_instance_status().await;
                 if status.is_err() {
                     msg.channel_id.say(&ctx.http, "Error getting instance status").await.unwrap();
@@ -218,7 +218,7 @@ impl EventHandler for Bot {
                     error!("Error sending message: {:?}", e);
                 }
             }
-            "$getip" => {
+            ("$getip", _) => {
                 msg.channel_id.say(&ctx.http, "Getting instance ip...").await.unwrap();
                 let typing = msg.channel_id.start_typing(&ctx.http).unwrap();
                 let ip = self.get_instance_ip().await;
@@ -235,18 +235,23 @@ impl EventHandler for Bot {
                     error!("Error stopping typing: {:?}", e);
                 }
             }
-            "$help" => {
+            ("$help", _) => {
                 if let Err(e) = msg.channel_id.say(&ctx.http, self.print_help().await).await {
                     error!("Error sending message: {:?}", e);
                 }
             }
-            "$hi" => {
+            ("$hi", _) => {
                 if let Err(e) = msg.channel_id.say(&ctx.http, "Hello!").await {
                     error!("Error sending message: {:?}", e);
                 }
             }
-            message => {
+            (message, is_auth) => {
                 if message.strip_prefix("$").is_none() {
+                    return;
+                } else if (message == "$start" || message == "$stop") && !is_auth {
+                    if let Err(e) = msg.channel_id.say(&ctx.http, "You are not authorized to use this command.").await {
+                        error!("Error sending message: {:?}", e);
+                    }
                     return;
                 }
                 if let Err(e) = msg.channel_id.say(&ctx.http, "Unknown command. Try $help for a list of commands.").await {
