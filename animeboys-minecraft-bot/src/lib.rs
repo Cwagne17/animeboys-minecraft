@@ -140,13 +140,6 @@ impl EventHandler for Bot {
             info!("Message sent in wrong channel");
             return;
         }
-        // TODO: Add a way to authorize users
-        if !AUTHORIZED_USERS.contains(&msg.author.tag().as_str()) {
-            if let Err(e) = msg.channel_id.say(&ctx.http, "You are not authorized to use this bot").await {
-                error!("Error sending message: {:?}", e);
-            }
-            return;
-        }
         debug!("Message received from {}", msg.author.tag());
         
         debug!("Message received: {}", msg.content);
