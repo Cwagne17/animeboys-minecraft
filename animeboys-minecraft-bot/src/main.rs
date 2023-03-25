@@ -1,5 +1,5 @@
 use std::time::Duration;
-use std::{fmt::Display};
+use std::fmt::Display;
 use std::env;
 use anyhow::anyhow;
 use aws_sdk_ec2::Region;
@@ -259,10 +259,10 @@ impl EventHandler for Bot {
     }
 }
 
-#[shuttle_service::main]
+#[shuttle_runtime::main]
 async fn serenity(
     #[shuttle_secrets::Secrets] secret_store: SecretStore,
-) -> shuttle_service::ShuttleSerenity {
+) -> shuttle_serenity::ShuttleSerenity {
     // Get the discord token set in `Secrets.toml`
     env::set_var("AWS_ACCESS_KEY_ID", secret_store.get("AWS_ACCESS_KEY_ID").unwrap_or_default());
     env::set_var("AWS_SECRET_ACCESS_KEY", secret_store.get("AWS_SECRET_ACCESS_KEY").unwrap_or_default());
@@ -278,5 +278,5 @@ async fn serenity(
         .await
         .expect("Err creating client");
 
-    Ok(client)
+    Ok(client.into())
 }
