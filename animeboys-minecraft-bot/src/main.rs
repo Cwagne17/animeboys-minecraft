@@ -259,6 +259,16 @@ impl EventHandler for Bot {
     }
 }
 
+#[tokio::main]
+async fn main() {
+    // TODO: GET KEYS
+
+    // TODO: GET DISCORD TOKEN
+
+    // TODO: GET INSTANCE ID
+
+}
+
 #[shuttle_runtime::main]
 async fn serenity(
     #[shuttle_secrets::Secrets] secret_store: SecretStore,
