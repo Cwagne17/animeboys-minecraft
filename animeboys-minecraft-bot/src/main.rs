@@ -261,32 +261,41 @@ impl EventHandler for Bot {
 
 #[tokio::main]
 async fn main() {
-    // TODO: GET KEYS
-
     // TODO: GET DISCORD TOKEN
-
+    let token = std::env::var("DISCORD_TOKEN").expect("DISORD_TOKEN is required");
     // TODO: GET INSTANCE ID
+    let instance_id = std::env::var("INSTANCE_ID").expect("INSTANCE_ID is required");
 
-}
-
-#[shuttle_runtime::main]
-async fn serenity(
-    #[shuttle_secrets::Secrets] secret_store: SecretStore,
-) -> shuttle_serenity::ShuttleSerenity {
-    // Get the discord token set in `Secrets.toml`
-    env::set_var("AWS_ACCESS_KEY_ID", secret_store.get("AWS_ACCESS_KEY_ID").unwrap_or_default());
-    env::set_var("AWS_SECRET_ACCESS_KEY", secret_store.get("AWS_SECRET_ACCESS_KEY").unwrap_or_default());
-    env::set_var("AWS_DEFAULT_REGION", "us-east-1");
-    let token = secret_store.get("DISCORD_TOKEN").ok_or_else(|| anyhow!("'DISCORD_TOKEN' was not found"))?;
-    let instance_id = secret_store.get("INSTANCE_ID").ok_or_else(|| anyhow!("'INSTANCE_ID' was not found"))?;
-
-    // Set gateway intents, which decides what events the bot will be notified about
     let intents = GatewayIntents::GUILD_MESSAGES | GatewayIntents::MESSAGE_CONTENT;
 
-    let client = Client::builder(&token, intents)
+    let mut client = Client::builder(&token, intents)
         .event_handler(Bot::new(instance_id).await)
         .await
-        .expect("Err creating client");
+        .expect("Error creating client");
 
-    Ok(client.into())
+    if let Err(why) = client.start().await {
+        println!("Error starting client: {:?}", why);
+    }
 }
+
+// #[shuttle_runtime::main]
+// async fn serenity(
+//     #[shuttle_secrets::Secrets] secret_store: SecretStore,
+// ) -> shuttle_serenity::ShuttleSerenity {
+//     // Get the discord token set in `Secrets.toml`
+//     env::set_var("AWS_ACCESS_KEY_ID", secret_store.get("AWS_ACCESS_KEY_ID").unwrap_or_default());
+//     env::set_var("AWS_SECRET_ACCESS_KEY", secret_store.get("AWS_SECRET_ACCESS_KEY").unwrap_or_default());
+//     env::set_var("AWS_DEFAULT_REGION", "us-east-1");
+//     let token = secret_store.get("DISCORD_TOKEN").ok_or_else(|| anyhow!("'DISCORD_TOKEN' was not found"))?;
+//     let instance_id = secret_store.get("INSTANCE_ID").ok_or_else(|| anyhow!("'INSTANCE_ID' was not found"))?;
+
+//     // Set gateway intents, which decides what events the bot will be notified about
+//     let intents = GatewayIntents::GUILD_MESSAGES | GatewayIntents::MESSAGE_CONTENT;
+
+//     let client = Client::builder(&token, intents)
+//         .event_handler(Bot::new(instance_id).await)
+//         .await
+//         .expect("Err creating client");
+
+//     Ok(client.into())
+// }
