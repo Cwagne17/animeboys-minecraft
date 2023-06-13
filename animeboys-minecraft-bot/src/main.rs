@@ -23,7 +23,7 @@ impl Ec2Error {
 }
 impl std::error::Error for Ec2Error {}
 
-const AUTHORIZED_USERS: [&str; 2] = ["faultsmelts#0000", "ChrisW#6807"];
+const AUTHORIZED_USERS: [&str; 3] = ["faultsmelts#0000", "ChrisW#6807", "Gio#6333"];
 const CHANNEL_ID: u64 = 1081598245358276721;
 struct Bot {
     /// The instance id of the ec2 instance
@@ -325,7 +325,8 @@ impl EventHandler for Bot {
         info!("{} is connected!", ready.user.name);
     }
 }
-
+/// To Cross compile for linux
+/// cross build --release --target armv7-unknown-linux-gnueabihf
 #[tokio::main]
 async fn main() {
     tracing_subscriber::fmt()
@@ -349,25 +350,3 @@ async fn main() {
         println!("Error starting client: {:?}", why);
     }
 }
-
-// #[shuttle_runtime::main]
-// async fn serenity(
-//     #[shuttle_secrets::Secrets] secret_store: SecretStore,
-// ) -> shuttle_serenity::ShuttleSerenity {
-//     // Get the discord token set in `Secrets.toml`
-//     env::set_var("AWS_ACCESS_KEY_ID", secret_store.get("AWS_ACCESS_KEY_ID").unwrap_or_default());
-//     env::set_var("AWS_SECRET_ACCESS_KEY", secret_store.get("AWS_SECRET_ACCESS_KEY").unwrap_or_default());
-//     env::set_var("AWS_DEFAULT_REGION", "us-east-1");
-//     let token = secret_store.get("DISCORD_TOKEN").ok_or_else(|| anyhow!("'DISCORD_TOKEN' was not found"))?;
-//     let instance_id = secret_store.get("INSTANCE_ID").ok_or_else(|| anyhow!("'INSTANCE_ID' was not found"))?;
-
-//     // Set gateway intents, which decides what events the bot will be notified about
-//     let intents = GatewayIntents::GUILD_MESSAGES | GatewayIntents::MESSAGE_CONTENT;
-
-//     let client = Client::builder(&token, intents)
-//         .event_handler(Bot::new(instance_id).await)
-//         .await
-//         .expect("Err creating client");
-
-//     Ok(client.into())
-// }
